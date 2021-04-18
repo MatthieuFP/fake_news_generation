@@ -51,6 +51,7 @@ if __name__ == "__main__":
         per_device_train_batch_size=args.batch_size,
         per_device_eval_batch_size=args.batch_size,
         gradient_accumulation_steps=args.gradient_step,
+        evaluation_strategy="epoch",
         learning_rate=args.lr,
         save_total_limit=1,
         load_best_model_at_end=True,

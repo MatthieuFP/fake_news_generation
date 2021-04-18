@@ -59,7 +59,7 @@ class Dataset:
                     "pad_token": "[PAD]",
                     "sep_token": "[SEP]",
                     "additional_special_tokens": ['<b>', '<t>', '<e>', '<m>']}
-        
+
         tokenizer = GPT2Tokenizer.from_pretrained("gpt2")
         tokenizer.add_special_tokens(special_tokens)
         return tokenizer
