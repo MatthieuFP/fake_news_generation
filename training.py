@@ -23,6 +23,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('--epochs', type=int, default=100)
     parser.add_argument('--batch_size', type=int, default=32)
+    parser.add_argument('--gradient_step', type=int, default=16)
     parser.add_argument('--lr', type=float, default=1e-4)
     args = parser.parse_args()
 
@@ -49,6 +50,7 @@ if __name__ == "__main__":
         num_train_epochs=args.epochs,
         per_device_train_batch_size=args.batch_size,
         per_device_eval_batch_size=args.batch_size,
+        gradient_accumulation_steps=args.gradient_step,
         learning_rate=args.lr,
         save_total_limit=1,
         load_best_model_at_end=True,
