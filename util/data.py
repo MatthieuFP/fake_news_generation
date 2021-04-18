@@ -44,9 +44,9 @@ class Dataset:
         keywords = self.keywords[news_id]
         title, cat = sample_met.title, sample_met.category
 
-        inputs, attn_mask = self.process_input(title, sample, cat, keywords, self.tokenizer)
+        encoded_inp = self.process_input(title, sample, cat, keywords, self.tokenizer)
 
-        return inputs, attn_mask
+        return encoded_inp  # inputs, attn_mask
 
     def __len__(self):
         return len(self.dataset)
@@ -72,7 +72,7 @@ class Dataset:
 
         encoded_inp = tokenizer(inp, truncation=True, max_length=1024, padding="max_length", return_tensors="pt")
 
-        return encoded_inp["input_ids"], encoded_inp["attention_mask"]
+        return encoded_inp  # encoded_inp["input_ids"], encoded_inp["attention_mask"]
 
 
 if __name__ == '__main__':
