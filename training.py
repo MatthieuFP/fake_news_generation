@@ -54,7 +54,6 @@ if __name__ == "__main__":
         load_best_model_at_end=True,
     )
 
-    logger.info("Start training...")
     trainer = Trainer(
         model=model,
         args=training_args,
@@ -63,6 +62,11 @@ if __name__ == "__main__":
         tokenizer=dataset.tokenizer
     )
 
+    logger.info("Start training...")
+    trainer.train()
+
+    logger.info("Saving model...")
+    trainer.save_model()
 
 
 
