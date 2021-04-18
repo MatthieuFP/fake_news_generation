@@ -12,7 +12,6 @@ import argparse
 import numpy as np
 from logger import logger
 import torch
-import torch.optim as optim
 from torch.utils.data import random_split
 from util import Dataset, load_model
 from uuid import uuid4
@@ -40,9 +39,6 @@ if __name__ == "__main__":
 
     # Load model
     model = load_model(dataset.tokenizer, device)
-    # Build optimizer
-    optimizer = optim.Adam(model.parameters(), lr=args.lr)
-
 
     # Output dir
     output_dir = f"output_dir/{RUN_ID}"
