@@ -28,6 +28,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     RUN_ID = str(uuid4())[:4]
+    print(f"RUN ID : {RUN_ID}")
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
     # load model
@@ -52,6 +53,7 @@ if __name__ == "__main__":
         per_device_eval_batch_size=args.batch_size,
         gradient_accumulation_steps=args.gradient_step,
         evaluation_strategy="epoch",
+        logging_strategy="epoch",
         learning_rate=args.lr,
         save_total_limit=1,
         load_best_model_at_end=True,
