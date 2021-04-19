@@ -46,6 +46,7 @@ if __name__ == "__main__":
     output_dir = f"output_dir/{RUN_ID}"
     output_dir_model = f"output_dir/gpt2_{RUN_ID}"
     os.makedirs(output_dir, exist_ok=False)
+    os.makedirs(output_dir_model, exist_ok=False)
 
     training_args = TrainingArguments(
         output_dir=output_dir,
