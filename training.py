@@ -44,6 +44,7 @@ if __name__ == "__main__":
 
     # Output dir
     output_dir = f"output_dir/{RUN_ID}"
+    output_dir_model = f"output_dir/gpt2_{RUN_ID}"
     os.makedirs(output_dir, exist_ok=False)
 
     training_args = TrainingArguments(
@@ -71,7 +72,7 @@ if __name__ == "__main__":
     trainer.train()
 
     logger.info("Saving model...")
-    trainer.save_model()
+    trainer.save_model(output_dir=output_dir_model)
 
 
 
