@@ -47,7 +47,9 @@ class Dataset:
 
         inputs, attn_mask = self.process_input(title, sample, cat, keywords, self.tokenizer, self.model)
         if self.model == 'bert-base-uncased':
-            label = torch.Tensor(self.cat_2_int[cat])
+            label = torch.LongTensor([self.cat_2_int[cat]])
+            inputs = inputs.flatten()
+            attn_mask = attn_mask.flatten()
         elif self.model == 'gpt2':
             label = inputs.clone()
         else:
@@ -90,12 +92,14 @@ class Dataset:
             random.shuffle(keywords)
             keys = ", ".join(keywords)
             inp = "[BOS] " + f"<{cat}> " + title + " [SEP] " + keys + sample + " [EOS]"
+            max_len = 1024
         elif model == 'bert-base-uncased':
             inp = sample
+            max_len = 512
         else:
             raise NameError("model unrecognized")
 
-        encoded_inp = tokenizer(inp, truncation=True, max_length=1024, padding=True, return_tensors="pt")
+        encoded_inp = tokenizer(inp, truncation=True, max_length=max_len, padding="max_length", return_tensors="pt")
 
         return encoded_inp["input_ids"], encoded_inp["attention_mask"]
 

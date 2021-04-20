@@ -8,6 +8,7 @@ Created on Sat Nov 7 12:47:39 2020
 
 
 import os
+import pdb
 import argparse
 from logger import logger
 import torch
@@ -24,16 +25,14 @@ if __name__ == "__main__":
     parser.add_argument('--batch_size', type=int, default=32)
     parser.add_argument('--gradient_step', type=int, default=16)
     parser.add_argument('--lr', type=float, default=1e-4)
-    parser.add_argument('--model', type=str, default='gpt2')
     args = parser.parse_args()
 
-    assert args.model in ['gpt2', 'bert-base-uncased'], "--model must be gpt2 or bert-base-uncased"
     RUN_ID = str(uuid4())[:4]
     print(f"RUN ID : {RUN_ID}")
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
     # load model
-    dataset = Dataset(model=args.model)
+    dataset = Dataset()
 
     # Build validation set
     train_size = int(0.8 * len(dataset))
@@ -41,11 +40,11 @@ if __name__ == "__main__":
     train_dataset, test_dataset = random_split(dataset, [train_size, test_size])
 
     # Load model
-    model = load_model(dataset.tokenizer, device, model=args.model)
+    model = load_model(dataset.tokenizer, device, model_type="gpt2")
 
     # Output dir
     output_dir = f"output_dir/{RUN_ID}"
-    output_dir_model = f"output_dir/{args.model}_{RUN_ID}"
+    output_dir_model = f"output_dir/gpt2_{RUN_ID}"
     os.makedirs(output_dir, exist_ok=False)
     os.makedirs(output_dir_model, exist_ok=False)
 
