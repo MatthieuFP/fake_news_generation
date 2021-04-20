@@ -95,7 +95,7 @@ class Dataset:
         else:
             raise NameError("model unrecognized")
 
-        encoded_inp = tokenizer(inp, truncation=True, max_length=1024, padding="max_length", return_tensors="pt")
+        encoded_inp = tokenizer(inp, truncation=True, max_length=1024, padding=True, return_tensors="pt")
 
         return encoded_inp["input_ids"], encoded_inp["attention_mask"]
 
