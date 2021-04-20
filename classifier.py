@@ -123,7 +123,7 @@ def main(model, epochs, train_loader, test_loader, optimizer, use_cuda, accumula
             else:
                 index += 1
 
-        if index > args.patience:
+        if index > patience:
             print("Stop training... Patience reached")
             break
 
