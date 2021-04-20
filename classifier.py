@@ -54,7 +54,7 @@ def train(epoch, model, train_loader, use_cuda, train_loss, accumulation_steps, 
     return model, train_loss
 
 
-def test(model, test_loader, use_cuda, test_loss, mode="val"):
+def test(model, test_loader, use_cuda, test_loss, batch_size, mode="val"):
 
     model.eval()
     test_batch_loss = 0
@@ -75,11 +75,12 @@ def test(model, test_loader, use_cuda, test_loss, mode="val"):
 
             pred = output.logits.max(1, keepdim=True)[1]
             if mode == "test":
-                predictions.append(pred.numpy().flatten())
-                labs.append(labels.numpy().flatten())
+                predictions.append(pred.cpu().numpy().flatten())
+                labs.append(labels.cpu().numpy().flatten())
             correct += pred.eq(labels.view_as(pred)).cpu().sum()
 
     test_batch_loss /= len(test_loader.dataset)
+    test_batch_loss *= batch_size
     score = 100. * correct / len(test_loader.dataset)
 
     test_loss.append(test_batch_loss)
@@ -94,7 +95,7 @@ def test(model, test_loader, use_cuda, test_loss, mode="val"):
         return test_loss, score.data.item()
 
 
-def main(model, epochs, train_loader, test_loader, optimizer, use_cuda, accumulation_steps, output_dir_model, patience):
+def main(model, epochs, train_loader, test_loader, optimizer, use_cuda, accumulation_steps, output_dir_model, patience, args):
 
     train_loss, test_loss, test_accuracy, epoch_time = [], [], [], []
 
@@ -106,7 +107,7 @@ def main(model, epochs, train_loader, test_loader, optimizer, use_cuda, accumula
         model, train_loss = train(epoch, model, train_loader, use_cuda, train_loss, accumulation_steps, optimizer)
 
         # Testing mode - test on the validation set
-        test_loss, test_score = test(model, test_loader, use_cuda, test_loss)
+        test_loss, test_score = test(model, test_loader, use_cuda, args.batch_size, test_loss)
         test_accuracy.append(test_score)
 
         if epoch == 1:
@@ -184,7 +185,7 @@ if __name__ == "__main__":
     if args.training:
         model, train_loss, test_loss, test_accuracy, epoch_time = main(model, args.epochs, train_loader, test_loader,
                                                                        optimizer, use_cuda, args.gradient_step,
-                                                                       output_dir_model, args.patience)
+                                                                       output_dir_model, args.patience, args)
 
         state_dict = torch.load(os.path.join(output_dir_model, 'model.pt'), map_location=device)
         model.load_state_dict(state_dict)
