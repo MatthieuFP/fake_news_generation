@@ -107,7 +107,7 @@ def main(model, epochs, train_loader, test_loader, optimizer, use_cuda, accumula
         model, train_loss = train(epoch, model, train_loader, use_cuda, train_loss, accumulation_steps, optimizer)
 
         # Testing mode - test on the validation set
-        test_loss, test_score = test(model, test_loader, use_cuda, args.batch_size, test_loss)
+        test_loss, test_score = test(model, test_loader, use_cuda, test_loss, args.batch_size)
         test_accuracy.append(test_score)
 
         if epoch == 1:
