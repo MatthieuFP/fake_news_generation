@@ -94,7 +94,7 @@ def test(model, test_loader, use_cuda, test_loss, mode="val"):
         return test_loss, score.data.item()
 
 
-def main(model, epochs, train_loader, test_loader, optimizer, use_cuda, accumulation_steps, output_dir_model):
+def main(model, epochs, train_loader, test_loader, optimizer, use_cuda, accumulation_steps, output_dir_model, patience):
 
     train_loss, test_loss, test_accuracy, epoch_time = [], [], [], []
 
@@ -144,6 +144,7 @@ if __name__ == "__main__":
     parser.add_argument('--gradient_step', type=int, default=16)
     parser.add_argument('--lr', type=float, default=1e-4)
     parser.add_argument('--training', action='store_true')
+    parser.add_argument('--patience', type=int, default=5)
     args = parser.parse_args()
 
     RUN_ID = str(uuid4())[:4]
@@ -182,7 +183,7 @@ if __name__ == "__main__":
     if args.training:
         model, train_loss, test_loss, test_accuracy, epoch_time = main(model, args.epochs, train_loader, test_loader,
                                                                        optimizer, use_cuda, args.gradient_step,
-                                                                       output_dir_model)
+                                                                       output_dir_model, args.patience)
 
         state_dict = torch.load(os.path.join(output_dir_model, 'model.pt'), map_location=device)
         model.load_state_dict(state_dict)
