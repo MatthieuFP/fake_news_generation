@@ -172,6 +172,10 @@ if __name__ == "__main__":
 
     # Load model
     model = load_model(dataset.tokenizer, device, model_type="bert-base-uncased")
+    for params in model.parameters():
+        params.requires_grad = False
+    for params in model.classifier.parameters():
+        params.requires_grad = False
 
     # Optimizer
     optimizer = optim.Adam(model.parameters(), lr=args.lr)
