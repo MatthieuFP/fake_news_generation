@@ -154,6 +154,7 @@ if __name__ == "__main__":
 
     # Save dir
     output_dir_model = f"output_dir/bert"
+    os.makedirs(output_dir_model, exist_ok=True)
 
     # load model
     dataset = Dataset(model="bert-base-uncased")
