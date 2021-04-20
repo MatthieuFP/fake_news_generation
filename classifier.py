@@ -79,7 +79,7 @@ def test(model, test_loader, use_cuda, test_loss, mode="val"):
                 labs.append(labels.numpy().flatten())
             correct += pred.eq(labels.view_as(pred)).cpu().sum()
 
-    test_batch_loss = np.mean(test_batch_loss)
+    test_batch_loss /= len(test_loader.dataset)
     score = 100. * correct / len(test_loader.dataset)
 
     test_loss.append(test_batch_loss)
@@ -112,7 +112,7 @@ def main(model, epochs, train_loader, test_loader, optimizer, use_cuda, accumula
         if epoch == 1:
             logger.info("Save model ... Epoch 1")
             index = 0
-            ref_score = test_accuracy
+            ref_score = test_score
             torch.save(model.state_dict(), os.path.join(output_dir_model, "model.pt"))
         else:
             if test_score > ref_score:
