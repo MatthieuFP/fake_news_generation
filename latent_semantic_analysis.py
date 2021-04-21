@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Created on Sat Nov 7 12:47:39 2020
+Created on Sat Apr 17 12:47:39 2021
 
 @author: matthieufuteral-peter
 """
@@ -35,7 +35,6 @@ def build_sample(dataset, n_news=0):
 
 
 if __name__ == "__main__":
-
 
     parser = argparse.ArgumentParser()
     parser.add_argument('--n_news', type=int, default=500)

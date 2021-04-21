@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Created on Sat Nov 7 12:47:39 2020
+Created on Sat Apr 17 12:47:39 2021
 
 @author: matthieufuteral-peter
 """
@@ -26,5 +26,15 @@ def load_model(tokenizer, device, model_type):
 
     model.to(device)
     return model
+
+
+def prompt_format(cat, title, keywords):
+    keys = ' '.join(keywords)
+    inp = "[BOS] " + f"<{cat}> " + " [SEP] " + title + " [SEP] " + keys + " [SEP] "
+    return inp
+
+
+
+
 
 
