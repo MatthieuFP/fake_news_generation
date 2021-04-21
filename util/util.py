@@ -19,7 +19,7 @@ def load_model(tokenizer, device, model_type, path_load=''):
                                             pad_token_id=tokenizer.pad_token_id,
                                             output_hidden_states=False)
         if path_load:
-            model = GPT2LMHeadModel.from_pretrained(path_load, config=config, from_pt=True)
+            model = GPT2LMHeadModel.from_pretrained(path_load, config=config)
         else:
             model = GPT2LMHeadModel.from_pretrained('gpt2', config=config)
         model.resize_token_embeddings(len(tokenizer))
