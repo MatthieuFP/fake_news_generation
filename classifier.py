@@ -193,7 +193,7 @@ if __name__ == "__main__":
 
         predictions, labels = test(model, test_loader, use_cuda, [], args.batch_size, mode="test")
 
-        pprint(classification_report(labels, predictions))
+        print(classification_report(labels, predictions))
 
 
 
