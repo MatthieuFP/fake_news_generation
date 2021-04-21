@@ -91,7 +91,8 @@ if __name__ == '__main__':
     tokenizer = Dataset.config_tokenizer(model="gpt2")
 
     # Load model
-    model = load_model(tokenizer=tokenizer, device=device, model_type="gpt2", path_load="models/gpt2/pytorch_model.bin")
+    model = load_model(tokenizer=tokenizer, device=device, model_type="gpt2", path_load="models/gpt2/pytorch_model.bin",
+                       path_config="models/gpt2/config.json")
     # checkpoint = torch.load("models/gpt2/pytorch_model.bin", map_location=device)
     # model.load_state_dict(checkpoint['model'])
 

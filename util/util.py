@@ -10,7 +10,7 @@ Created on Sat Apr 17 12:47:39 2021
 from transformers import GPT2LMHeadModel, GPT2Config, BertForSequenceClassification, BertConfig
 
 
-def load_model(tokenizer, device, model_type, path_load=''):
+def load_model(tokenizer, device, model_type, path_load='', path_config=''):
     if model_type == 'gpt2':
         config = GPT2Config.from_pretrained(model_type,
                                             bos_token_id=tokenizer.bos_token_id,
@@ -19,6 +19,7 @@ def load_model(tokenizer, device, model_type, path_load=''):
                                             pad_token_id=tokenizer.pad_token_id,
                                             output_hidden_states=False)
         if path_load:
+            config = GPT2Config.from_pretrained(path_config)
             model = GPT2LMHeadModel.from_pretrained(path_load, config=config)
         else:
             model = GPT2LMHeadModel.from_pretrained('gpt2', config=config)
