@@ -55,7 +55,6 @@ if __name__ == "__main__":
     X_transformed = svd.fit_transform(X)
     logger.info("Explained variance ratio : {:.4f}".format(svd.explained_variance_ratio_.sum()))
 
-
     logger.info("Start TSNE")
     tsne = TSNE(n_components=2)
     X_embedded = tsne.fit_transform(X_transformed)

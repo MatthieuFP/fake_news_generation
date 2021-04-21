@@ -191,7 +191,7 @@ if __name__ == "__main__":
         model.load_state_dict(state_dict)
         model.eval()
 
-        predictions, labels = test(model, test_loader, use_cuda, [], mode="test")
+        predictions, labels = test(model, test_loader, use_cuda, [], args.batch_size, mode="test")
 
         pprint(classification_report(labels, predictions))
 
