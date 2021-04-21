@@ -91,9 +91,9 @@ if __name__ == '__main__':
     tokenizer = Dataset.config_tokenizer(model="gpt2")
 
     # Load model
-    model = load_model(tokenizer=tokenizer, device=device, model_type="gpt2")
-    checkpoint = torch.load("models/gpt2/pytorch_model.bin", map_location=device)
-    model.load_state_dict(checkpoint['model'])
+    model = load_model(tokenizer=tokenizer, device=device, model_type="gpt2", path_load="models/gpt2/pytorch_model.bin")
+    # checkpoint = torch.load("models/gpt2/pytorch_model.bin", map_location=device)
+    # model.load_state_dict(checkpoint['model'])
 
     prompt = torch.Tensor(tokenizer.encode(prompt_format(args.cat, args.title, args.keywords))).unsqueeze(0)
     prompt = prompt.to(device)
