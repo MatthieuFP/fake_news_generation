@@ -91,7 +91,7 @@ class Dataset:
         if model == 'gpt2':
             random.shuffle(keywords)
             keys = ", ".join(keywords)
-            inp = "[BOS] " + f"<{cat}> " + title + " [SEP] " + keys + sample + " [EOS]"
+            inp = "[BOS] " + f"<{cat}> " + title + " [SEP] " + keys + " [SEP] " + sample + " [EOS]"
             max_len = 1024
         elif model == 'bert-base-uncased':
             inp = sample
