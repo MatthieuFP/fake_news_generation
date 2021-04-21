@@ -78,7 +78,7 @@ if __name__ == '__main__':
         labels = dict()
 
     # Generate ids
-    news_ids = [str(uuid4())[:8] for _ in range(args.cat)]
+    news_ids = [str(uuid4())[:8] for _ in range(args.n_sentences)]
     if args.topk:
         for news_id in news_ids:
             labels[news_id] = args.cat
