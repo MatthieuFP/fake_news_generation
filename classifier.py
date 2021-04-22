@@ -152,12 +152,11 @@ if __name__ == "__main__":
     print(f"RUN ID : {RUN_ID}")
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     use_cuda = True if torch.cuda.is_available() else False
-    # Save dir
-    output_dir_model = f"output_dir/bert"
 
     # Training
     if args.training:
-
+        # Save dir
+        output_dir_model = f"output_dir/bert"
         os.makedirs(output_dir_model, exist_ok=True)
 
         # load model
@@ -206,7 +205,7 @@ if __name__ == "__main__":
 
         model = load_model(dataset.tokenizer, device, model_type="bert-base-uncased")
 
-        state_dict = torch.load(os.path.join(output_dir_model, 'model.pt'), map_location=device)
+        state_dict = torch.load(os.path.join("models/bert", 'model.pt'), map_location=device)
         model.load_state_dict(state_dict)
         model.eval()
 
