@@ -147,7 +147,7 @@ class GeneratedData(Dataset):
     def __len__(self):
         return len(self.dataset)
 
-    
+
 if __name__ == '__main__':
 
     tokenizer = AutoTokenizer.from_pretrained("gpt2")
