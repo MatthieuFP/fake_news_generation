@@ -144,7 +144,10 @@ class GeneratedData(Dataset):
 
         return {"input_ids": inputs, "label": label, "attention_mask": attn_mask}
 
+    def __len__(self):
+        return len(self.dataset)
 
+    
 if __name__ == '__main__':
 
     tokenizer = AutoTokenizer.from_pretrained("gpt2")
