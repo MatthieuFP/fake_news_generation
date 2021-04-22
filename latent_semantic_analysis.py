@@ -14,7 +14,7 @@ from logger import logger
 import argparse
 import matplotlib.pyplot as plt
 import random
-from util import Dataset
+from util import Dataset, GeneratedData
 from sklearn.decomposition import TruncatedSVD
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.manifold import TSNE
@@ -39,18 +39,31 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('--n_news', type=int, default=500)
     parser.add_argument('--n_components', type=int, default=256)
+    parser.add_argument('--generated', action='store_true')
     args = parser.parse_args()
 
     random.seed(42)
-    dataset = Dataset()
-    corpus, category = build_sample(dataset, n_news=args.n_news)
     labels = {'b': 'b', 'm': 'r', 't': 'g', 'e': 'y'}
-
     vectorizer = TfidfVectorizer(input='filename')
+    svd = TruncatedSVD(n_components=args.n_components)
+
+    if not args.generated:
+        logger.info(f"Start LSA with original data : {args.n_news}")
+        dataset = Dataset()
+        corpus, category = build_sample(dataset, n_news=args.n_news)
+
+    else:
+        logger.info("Start LSA with generated data")
+        dataset = GeneratedData()
+        corpus = dataset.dataset
+        category = []
+        for path_id in dataset.dataset:
+            news_id = os.path.basename(path_id)[:-4]
+            category.append(dataset.labels[news_id])
+
     X = vectorizer.fit_transform(corpus)
 
     logger.info("Start SVD")
-    svd = TruncatedSVD(n_components=args.n_components)
     X_transformed = svd.fit_transform(X)
     logger.info("Explained variance ratio : {:.4f}".format(svd.explained_variance_ratio_.sum()))
 
@@ -64,8 +77,14 @@ if __name__ == "__main__":
         ax.scatter(X_embedded[idx, 0], X_embedded[idx, 1], c=labels[g], label=g)
 
     ax.legend()
+
+    os.makedirs("plots", exist_ok=True)
+
+    if args.generated:
+        fig.savefig("plots/tsne_lsa_generated.png")
+    else:
+        fig.savefig("plots/tsne_lsa.png")
+        
     plt.show()
-
-
 
 
