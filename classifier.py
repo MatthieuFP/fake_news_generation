@@ -156,7 +156,7 @@ if __name__ == "__main__":
     # Training
     if args.training:
         # Save dir
-        output_dir_model = f"output_dir/bert"
+        output_dir_model = f"models/bert"
         os.makedirs(output_dir_model, exist_ok=True)
 
         # load model
