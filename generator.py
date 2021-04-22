@@ -103,7 +103,7 @@ if __name__ == '__main__':
     logger.info("Start generate news")
     news = generate(prompt, model, args)
     for idx, text in enumerate(news):
-        with open(f"news_generated/news/{news_ids[idx]}", "w") as f:
+        with open(f"news_generated/news/{news_ids[idx]}.txt", "w") as f:
             f.write(text)
 
     with open("news_generated/labels.json", "w") as fj:
