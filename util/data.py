@@ -105,7 +105,6 @@ class Dataset:
         return encoded_inp["input_ids"], encoded_inp["attention_mask"]
 
 
-
 class GeneratedData(Dataset):
 
     def __init__(self):
@@ -120,6 +119,7 @@ class GeneratedData(Dataset):
         self.cat_2_int = {'b': 0, 't': 1, 'e': 2, 'm': 3}
         self.int_2_cat = {v: k for k, v in self.cat_2_int.items()}
         self.model = "bert-base-uncased"
+        self.tokenizer = self.config_tokenizer(self.model)
 
     def __getitem__(self, idx):
 
