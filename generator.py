@@ -8,7 +8,6 @@ Created on Sat Apr 17 12:47:39 2021
 
 
 import os
-import ipdb
 import json
 import argparse
 from logger import logger
@@ -47,6 +46,7 @@ def generate(prompt, model, args):
     for i, output in enumerate(sample_generated):
         text = tokenizer.decode(output, skip_special_tokens=True)
         news.append(text)
+        print("{}: {}\n\n".format(i + 1, text))
 
     return news
 
@@ -97,10 +97,10 @@ if __name__ == '__main__':
     # checkpoint = torch.load("models/gpt2/pytorch_model.bin", map_location=device)
     # model.load_state_dict(checkpoint['model'])
 
-    prompt = torch.Tensor(tokenizer.encode(prompt_format(args.cat, args.title, args.keywords))).unsqueeze(0)
+    prompt = torch.Tensor(tokenizer.encode(prompt_format(args.cat, args.title, args.keywords))).unsqueeze(0).long()
     prompt = prompt.to(device)
 
-    ipdb.set_trace()
+    logger.info("Start generate news")
     news = generate(prompt, model, args)
     for idx, text in enumerate(news):
         with open(f"news_generated/news/{news_ids[idx]}", "w") as f:
