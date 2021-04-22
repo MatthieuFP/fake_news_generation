@@ -126,7 +126,7 @@ class GeneratedData(Dataset):
         path_id = self.dataset[idx]
         with open(path_id, 'r') as f:
             sample = f.readlines()
-        news_id = path_id[:-4]
+        news_id = os.path.basename(path_id)[:-4]
 
         cat = self.labels[news_id]
         sample = '\n'.join(sample[1:])
