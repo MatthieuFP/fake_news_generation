@@ -197,7 +197,7 @@ if __name__ == "__main__":
         print(classification_report(labels, predictions))
 
     else:
-
+        logger.info("Testing on generated data")
         dataset = GeneratedData()
         test_loader = DataLoader(dataset,
                                  batch_size=args.batch_size,
