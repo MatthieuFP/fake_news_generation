@@ -8,6 +8,7 @@ Created on Sat Apr 17 12:47:39 2021
 
 
 import os
+import ipdb
 import json
 import argparse
 from logger import logger
@@ -99,6 +100,7 @@ if __name__ == '__main__':
     prompt = torch.Tensor(tokenizer.encode(prompt_format(args.cat, args.title, args.keywords))).unsqueeze(0)
     prompt = prompt.to(device)
 
+    ipdb.set_trace()
     news = generate(prompt, model, args)
     for idx, text in enumerate(news):
         with open(f"news_generated/news/{news_ids[idx]}", "w") as f:
