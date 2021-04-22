@@ -7,6 +7,7 @@ Created on Sat Apr 17 12:47:39 2021
 """
 
 import os
+import json
 import torch
 import random
 import re
@@ -102,6 +103,46 @@ class Dataset:
         encoded_inp = tokenizer(inp, truncation=True, max_length=max_len, padding="max_length", return_tensors="pt")
 
         return encoded_inp["input_ids"], encoded_inp["attention_mask"]
+
+
+
+class GeneratedData(Dataset):
+
+    def __init__(self):
+        super(GeneratedData, self).__init__()
+        # Load labels
+        with open("news_generated/labels.json", 'r') as fj:
+            self.labels = json.load(fj)
+
+        # News
+        self.dataset = glob.glob("./news_generated/news/*.txt")
+
+        self.cat_2_int = {'b': 0, 't': 1, 'e': 2, 'm': 3}
+        self.int_2_cat = {v: k for k, v in self.cat_2_int.items()}
+        self.model = "bert-base-uncased"
+
+    def __getitem__(self, idx):
+
+        path_id = self.dataset[idx]
+        with open(path_id, 'r') as f:
+            sample = f.readlines()
+        news_id = path_id[:-4]
+
+        cat = self.labels[news_id]
+        sample = '\n'.join(sample[1:])
+
+        inputs, attn_mask = self.process_input(title='', sample=sample, cat=cat, keywords='', tokenizer=self.tokenizer,
+                                               model=self.model)
+        if self.model == 'bert-base-uncased':
+            label = torch.LongTensor([self.cat_2_int[cat]])
+            inputs = inputs.flatten()
+            attn_mask = attn_mask.flatten()
+        elif self.model == 'gpt2':
+            label = inputs.clone()
+        else:
+            raise NameError("Unrecognized model")
+
+        return {"input_ids": inputs, "label": label, "attention_mask": attn_mask}
 
 
 if __name__ == '__main__':

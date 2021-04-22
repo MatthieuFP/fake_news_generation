@@ -18,7 +18,7 @@ import torch
 import torch.optim as optim
 from torch.utils.data import DataLoader
 from torch.utils.data import random_split
-from util import Dataset, load_model
+from util import Dataset, load_model, GeneratedData
 from uuid import uuid4
 from sklearn.metrics import classification_report
 from pprint import pprint
@@ -152,37 +152,38 @@ if __name__ == "__main__":
     print(f"RUN ID : {RUN_ID}")
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     use_cuda = True if torch.cuda.is_available() else False
-
     # Save dir
     output_dir_model = f"output_dir/bert"
-    os.makedirs(output_dir_model, exist_ok=True)
-
-    # load model
-    dataset = Dataset(model="bert-base-uncased")
-
-    # Build validation set
-    train_size = int(0.8 * len(dataset))
-    test_size = len(dataset) - train_size
-    train_dataset, test_dataset = random_split(dataset, [train_size, test_size])
-    train_loader = DataLoader(train_dataset,
-                              batch_size=args.batch_size,
-                              shuffle=True,
-                              num_workers=0)
-    test_loader = DataLoader(test_dataset,
-                             batch_size=args.batch_size,
-                             shuffle=False,
-                             num_workers=0)
-
-    # Load model
-    model = load_model(dataset.tokenizer, device, model_type="bert-base-uncased")
-    for params in model.bert.parameters():
-        params.requires_grad = False
-
-    # Optimizer
-    optimizer = optim.Adam(model.parameters(), lr=args.lr)
 
     # Training
     if args.training:
+
+        os.makedirs(output_dir_model, exist_ok=True)
+
+        # load model
+        dataset = Dataset(model="bert-base-uncased")
+
+        # Build validation set
+        train_size = int(0.8 * len(dataset))
+        test_size = len(dataset) - train_size
+        train_dataset, test_dataset = random_split(dataset, [train_size, test_size])
+        train_loader = DataLoader(train_dataset,
+                                  batch_size=args.batch_size,
+                                  shuffle=True,
+                                  num_workers=0)
+        test_loader = DataLoader(test_dataset,
+                                 batch_size=args.batch_size,
+                                 shuffle=False,
+                                 num_workers=0)
+
+        # Load model
+        model = load_model(dataset.tokenizer, device, model_type="bert-base-uncased")
+        for params in model.bert.parameters():
+            params.requires_grad = False
+
+        # Optimizer
+        optimizer = optim.Adam(model.parameters(), lr=args.lr)
+
         model, train_loss, test_loss, test_accuracy, epoch_time = main(model, args.epochs, train_loader, test_loader,
                                                                        optimizer, use_cuda, args.gradient_step,
                                                                        output_dir_model, args.patience, args)
@@ -194,6 +195,22 @@ if __name__ == "__main__":
         predictions, labels = test(model, test_loader, use_cuda, [], args.batch_size, mode="test")
 
         print(classification_report(labels, predictions))
+
+    else:
+
+        dataset = GeneratedData()
+        test_loader = DataLoader(dataset,
+                                 batch_size=args.batch_size,
+                                 shuffle=False,
+                                 num_workers=0)
+
+        model = load_model(dataset.tokenizer, device, model_type="bert-base-uncased")
+
+        state_dict = torch.load(os.path.join(output_dir_model, 'model.pt'), map_location=device)
+        model.load_state_dict(state_dict)
+        model.eval()
+
+        predictions, labels = test(model, test_loader, use_cuda, [], args.batch_size, mode="test")
 
 
 
