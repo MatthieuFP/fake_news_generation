@@ -84,7 +84,7 @@ if __name__ == "__main__":
         fig.savefig("plots/tsne_lsa_generated.png")
     else:
         fig.savefig("plots/tsne_lsa.png")
-        
+
     plt.show()
 
 
